@@ -1,24 +1,17 @@
-from typing import List, Optional
+from typing import Dict, List, Optional
 
 
 class Trie:
     def __init__(self, value=""):
         self.value = value
         self.hasLeaf = False
-        self.nodes: List[Trie] = []
-
-    def __findNode(self, letter: chr) -> Optional["Trie"]:
-        for node in self.nodes:
-            if node.value == letter:
-                return node
-
-        return None
+        self.nodes: Dict[chr, Trie] = {}
 
     def insert(self, word: str) -> None:
-        node = self.__findNode(word[0])
+        node = self.nodes.get(word[0])
         if node is None:
             node = Trie(word[0])
-            self.nodes.append(node)
+            self.nodes[word[0]] = node
 
         if len(word) == 1:
             node.hasLeaf = True
@@ -27,7 +20,7 @@ class Trie:
         node.insert(word[1:])
 
     def search(self, word: str) -> bool:
-        node = self.__findNode(word[0])
+        node = self.nodes.get(word[0])
         if node is None:
             return False
 
@@ -40,7 +33,7 @@ class Trie:
         return node.search(word[1:])
 
     def startsWith(self, prefix: str) -> bool:
-        node = self.__findNode(prefix[0])
+        node = self.nodes.get(prefix[0])
         if node is None:
             return False
 
