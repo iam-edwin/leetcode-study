@@ -21,3 +21,18 @@ class Solution:
                         continue
 
         return dp[len(s) - 1]
+
+    def wordBreak2(self, s: str, wordDict: List[str]) -> bool:
+        dp = [True] + [False for _ in range(len(s))]
+
+        for i in range(1, len(s) + 1):
+            for word in wordDict:
+                if (
+                    len(word) <= i
+                    and s[i - len(word) : i] == word
+                    and dp[i - len(word)]
+                ):
+                    dp[i] = True
+                    break
+
+        return dp[len(s)]
